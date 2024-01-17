@@ -10,7 +10,13 @@ export default class GlobalValidationPipe implements PipeTransform<any> {
         }
         const errors = await validate(plainToClass(metatype, value) as object);
         if (errors.length > 0) {
-            throw new BadRequestException('请检查参数~');
+            const cause = [];
+            for (const err of errors)
+                cause.push(`${err.property}: ${err.constraints[Object.keys(err.constraints)[0]]}`);
+
+            throw new BadRequestException('请检查参数~', {
+                cause,
+            });
         }
         return value;
     }
