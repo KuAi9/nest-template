@@ -1,9 +1,9 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, UnauthorizedException } from '@nestjs/common';
 import { Response } from 'express';
 
-@Catch(HttpException)
+@Catch(UnauthorizedException)
 export class AuthFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
+    catch(exception: UnauthorizedException, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         response.statusMessage = 'Token is Invalid : Please Login Again';
